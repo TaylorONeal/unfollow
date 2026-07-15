@@ -1,6 +1,7 @@
 # unfollow
 
-Agent skills for cleaning up social-media following lists safely. Built for
+Agent skills for cleaning up social-media accounts safely — following lists on
+the follow-graph platforms, and groups/Pages/people on Facebook. Built for
 Claude (Cowork / Claude Code with browser automation), portable to any agent
 that can drive a browser and edit local files.
 
@@ -22,6 +23,7 @@ real people you know. These skills are built around three ideas:
 | Skill | Platform | Status |
 |-------|----------|--------|
 | [`skills/x-unfollow`](skills/x-unfollow/) | X (Twitter) | Ready |
+| [`skills/facebook-cleanup`](skills/facebook-cleanup/) | Facebook | Ready |
 | [`skills/instagram-unfollow`](skills/instagram-unfollow/) | Instagram | Coming next |
 
 Each skill folder contains:
@@ -101,6 +103,38 @@ answer just sits there — silence never turns into a cut.
 Expected pace: with the default cap of 50, a 2,000-account list that's ~40%
 cuttable takes roughly 3-4 weeks. Low cut counts on some days are normal —
 either X throttled the list or that stretch of follows was intentional.
+
+## Facebook cleanup
+
+[`skills/facebook-cleanup`](skills/facebook-cleanup/) applies the same
+drip-and-queue design to Facebook, which is not one list but three surfaces
+with very different reversibility:
+
+- **Groups → Leave** (reversible; private groups may need re-approval)
+- **Pages → Unlike / Unfollow** (fully reversible — the safest surface)
+- **People → Unfollow** (stay friends, hide feed — reversible) or **Unfriend**
+  (sever the relationship — effectively irreversible at scale)
+
+The core safety idea is that Unfollow and Unfriend are not the same action.
+Unfollow can be allowed freely if you opt in; **unfriend is always gated behind
+an explicit yes** and never happens automatically. Two more Facebook-specific
+guards on top of the shared model:
+
+- **Admin guard.** Groups you admin or moderate are never auto-left (leaving as
+  the last admin can orphan a group) — they go to a sign-off lane.
+- **Dialog verification.** Facebook's grid drifts and reflows after every
+  action, so every Leave/Unlike confirm dialog is screenshot-checked to confirm
+  it names the *right* item before the click. This catches wrong-row misfires
+  the grid produces in practice.
+
+It runs **weekly** rather than daily (Facebook flags fast automation harder),
+and adds a **batch-authorization mode**: because Facebook's list views hard-cap
+what they render, the skill cycles all five sort orders to build a fuller
+census, writes it to a to-do file bucketed keep/cut/review, and you reply once
+("remove everything except X, Y, Z") to authorize a big pass — with every
+safety check still on. Setup and the scheduled run work exactly like the X
+skill; see [`skills/facebook-cleanup/SKILL.md`](skills/facebook-cleanup/SKILL.md)
+and [`scheduled-task.md`](skills/facebook-cleanup/scheduled-task.md).
 
 ## Safety model
 
