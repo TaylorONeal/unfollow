@@ -24,7 +24,7 @@ real people you know. These skills are built around three ideas:
 |-------|----------|--------|
 | [`skills/x-unfollow`](skills/x-unfollow/) | X (Twitter) | Ready |
 | [`skills/facebook-cleanup`](skills/facebook-cleanup/) | Facebook | Ready |
-| [`skills/instagram-unfollow`](skills/instagram-unfollow/) | Instagram | Coming next |
+| [`skills/instagram-unfollow`](skills/instagram-unfollow/) | Instagram | Ready |
 
 Each skill folder contains:
 
@@ -136,6 +136,32 @@ safety check still on. Setup and the scheduled run work exactly like the X
 skill; see [`skills/facebook-cleanup/SKILL.md`](skills/facebook-cleanup/SKILL.md)
 and [`scheduled-task.md`](skills/facebook-cleanup/scheduled-task.md).
 
+## Instagram cleanup
+
+[`skills/instagram-unfollow`](skills/instagram-unfollow/) applies the same
+drip-and-queue design to Instagram, the strictest platform here. Instagram
+action-blocks aggressively and weighs **per-hour** volume as much as the daily
+total, so this skill runs the most conservative version of the family:
+
+- **Lower cap, paced within the run.** Default 30/day (vs X's 50), capped at
+  ~10 unfollows per rolling hour and spaced ~30-60s apart. New, reactivated, or
+  previously-blocked accounts start at a **10/day warm-up tier** and step up only
+  if no restriction appears.
+- **Native "Least interacted with" as the first candidate source.** Instagram
+  exposes its own cleanup lists under Following → Categories; the skill reads
+  "Least interacted with" as a high-signal pool before touching the full list.
+- **Close Friends is a native protected source**, alongside DMs, Gmail, and
+  Contacts — anyone on your green-star list is never cut.
+- **Private accounts are never auto-cut on inactivity** — you can't see their
+  posts to verify, so they route to review at most.
+- **Stops on any restriction** — "Try Again Later", "We restrict certain
+  activity", or a challenge — and never attempts to solve a challenge or captcha.
+
+Setup and the scheduled run work exactly like the X skill; see
+[`skills/instagram-unfollow/SKILL.md`](skills/instagram-unfollow/SKILL.md), its
+[`README.md`](skills/instagram-unfollow/README.md) (with a run-flow diagram), and
+[`scheduled-task.md`](skills/instagram-unfollow/scheduled-task.md).
+
 ## Safety model
 
 | Risk | Mitigation |
@@ -180,11 +206,8 @@ system is designed to get more conservative over time, not less.
 
 ## Roadmap
 
-- **Instagram** ([`skills/instagram-unfollow`](skills/instagram-unfollow/)) —
-  same design, lower caps (Instagram action-blocks far more aggressively), and
-  it will read Instagram's native "least interacted with" list as a first-pass
-  candidate source.
-- Candidates after that: LinkedIn, TikTok, YouTube subscriptions.
+- Candidates next: LinkedIn, TikTok, YouTube subscriptions — same drip-and-queue
+  design, per-platform caps and protected-contact sources.
 
 ## License
 
