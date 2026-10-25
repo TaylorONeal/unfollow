@@ -7,6 +7,17 @@ decisions, and execute only explicitly approved batches where permitted tools
 support the action. This is an instruction package, not a running automation
 service or an enforced security boundary.
 
+## Why this exists
+
+Social feeds decay quietly. You follow a few hundred accounts over a decade, your interests
+move, and the feed keeps optimizing for whoever posts most. Cleaning it up by hand means
+scrolling a list of people you used to know and making a judgment call several hundred
+times, so most people never do it.
+
+The hard part was never the clicking. It is not accidentally cutting someone who matters.
+These skills put the preferences you confirm in front of every decision, keep the default
+read-only, and hold anything uncertain for you to look at yourself.
+
 | Skill | Scope |
 |---|---|
 | [x-unfollow](skills/x-unfollow/SKILL.md) | X review/export; manual execution by default |
@@ -96,4 +107,20 @@ exclusion, symlink rejection and preservation of existing installs. They do not
 prove agent classification, platform compliance or live account behavior.
 See [review and scenarios](docs/REVIEW.md) and [documentation index](docs/INDEX.md).
 
-MIT — see [LICENSE](LICENSE).
+
+---
+
+## More from me
+
+I'm Taylor O'Neal. I work in product and analytics, teach at Miami University, and put the
+tools I actually use into the open.
+
+- [tayloroneal.com](https://www.tayloroneal.com) for what I'm working on and how to reach me
+- [@businesstaylor](https://x.com/businesstaylor) on X, where I post build notes
+- [@grizzpm](https://www.youtube.com/@grizzpm) on YouTube
+
+If this saved you time, a star helps other people find it. Issues and PRs are welcome.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
