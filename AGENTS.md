@@ -15,3 +15,7 @@ all personal installations and from the Gmail repository.
   with `python3 scripts/check.py --sync` and run checks/tests after changes.
 - Update docs/INDEX.md when documentation changes. Live social-account actions
   are not part of repository tests or publishing authorization.
+
+## Secrets
+
+Never write a secret into any file: code, config, docs, notes, prompts, submission notes, logs or commit messages. That covers API keys (RevenueCat and Stripe `sk_` keys included), Supabase service role keys and JWT secrets, access tokens (Codemagic, Vercel, GitHub, Expo), deploy keys, and the contents of `.p8` or `.pem` files. Write where the secret lives instead, for example "RevenueCat dashboard > API keys" or "Supabase secrets", and read it from an environment variable. The secret-scan check (`.github/workflows/secret-scan.yml`, rules in `.gitleaks.toml`) fails any pull request that adds one. If a real secret was ever committed, removing it is not enough: say so, so the key gets rotated.
